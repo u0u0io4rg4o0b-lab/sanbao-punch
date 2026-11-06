@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#101426">
+<title>三寶消氣拳｜追撞還嗆聲？打到他認錯懺悔！</title>
+<meta name="description" content="主觀視角消氣互動小遊戲：從後面追撞人還態度惡劣的台灣三寶，左勾拳、右勾拳、巴頭，打到他貼OK繃、雙眼黑輪、舉白旗求饒懺悔！">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://u0u0io4rg4o0b-lab.github.io/sanbao-punch/">
+<meta property="og:title" content="三寶消氣拳 🥊 從後面追撞還態度惡劣？打到他認錯懺悔！">
+<meta property="og:description" content="手機點開直接玩！左勾拳、右勾拳、巴頭＋台灣男聲斥責語音，把死不認錯的三寶打到求饒懺悔！">
+<meta property="og:image" content="https://u0u0io4rg4o0b-lab.github.io/sanbao-punch/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥊</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- 1. 頂部精簡狀態列：僅保留名稱、神態標籤、連擊與血條，不顯示多餘階段數字 -->
+  <header id="hud">
+    <div class="info">
+      <div id="name">
+        <span class="title">🚗 追撞三寶阿伯</span>
+        <div class="badges">
+          <span id="combo" hidden></span>
+          <span id="mood">囂張跋扈</span>
+        </div>
+      </div>
+      <div class="hpbar" aria-label="三寶氣焰">
+        <div id="hplag"></div>
+        <div id="hpfill"></div>
+      </div>
+    </div>
+    <button id="mute" aria-label="聲音開關" title="聲音開關">🔊</button>
+  </header>
+
+  <!-- 2. 專屬對白區：獨立於人物照片上方，絕不遮擋額頭與傷勢 -->
+  <section id="dialog" aria-live="polite">
+    <div id="bubble" class="show">
+      <span id="who" class="who">🗣️ 三寶阿伯</span>
+      <span id="bubbleText">你說我從後面撞你？明明是你紅燈煞車踩太急，我才撞上去的！</span>
+    </div>
+  </section>
+
+  <!-- 3. 主觀視角人物舞台 -->
+  <main id="stage">
+    <svg id="dude" data-stage="0" viewBox="0 0 473 750" preserveAspectRatio="xMidYMin slice" role="img" aria-label="追撞三寶阿伯">
+      <defs>
+        <radialGradient id="bruiseGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#2c1040" stop-opacity="0.78"/>
+          <stop offset="65%" stop-color="#4a1c68" stop-opacity="0.58"/>
+          <stop offset="100%" stop-color="#4a1c68" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="swellGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ff2e4c" stop-opacity="0.72"/>
+          <stop offset="70%" stop-color="#ff6b6b" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- 動態可受擊真人主體＋各階段傷勢圖層 -->
+      <g id="head">
+        <image id="faceImg" href="target.jpg" x="0" y="0" width="473" height="750"/>
+        <rect id="faceHitTint" x="0" y="0" width="473" height="750" fill="#ff2a2a" opacity="0"/>
+
+        <!-- 求饒階段：舉白旗 -->
+        <g class="v s3 s5" id="whiteFlag">
+          <line x1="58" y1="680" x2="58" y2="330" stroke="#8b5a2b" stroke-width="9" stroke-linecap="round"/>
+          <g class="flagcloth">
+            <path d="M62 336 Q135 316 196 344 L196 426 Q135 402 62 422 Z" fill="#ffffff" stroke="#222" stroke-width="4"/>
+            <text x="129" y="392" font-size="34" font-weight="900" fill="#e63946" text-anchor="middle">投降</text>
+          </g>
+        </g>
+
+        <!-- 互動點擊定位參考圓（透明） -->
+        <ellipse id="face" cx="220" cy="135" rx="115" ry="135" fill="transparent"/>
+
+        <!-- 單眼黑輪（畫面左側眼睛） -->
+        <g class="v s1 s2 s3 s4 s5">
+          <ellipse cx="166" cy="105" rx="44" ry="30" fill="url(#bruiseGrad)" transform="rotate(-6 166 105)"/>
+          <ellipse cx="166" cy="105" rx="30" ry="18" fill="none" stroke="#2a0838" stroke-width="4" opacity="0.45"/>
+        </g>
+
+        <!-- 雙眼黑輪（畫面右側眼睛） -->
+        <g class="v s2 s3 s4 s5">
+          <ellipse cx="264" cy="118" rx="44" ry="30" fill="url(#bruiseGrad)" transform="rotate(8 264 118)"/>
+          <ellipse cx="264" cy="118" rx="30" ry="18" fill="none" stroke="#2a0838" stroke-width="4" opacity="0.45"/>
+        </g>
+
+        <!-- 額頭瘀青 -->
+        <ellipse class="v s1 s2 s3 s4 s5" cx="278" cy="56" rx="28" ry="18" fill="url(#bruiseGrad)"/>
+
+        <!-- 臉頰 OK 繃 -->
+        <g class="v s1 s2 s3 s4 s5" transform="rotate(-24 136 162)">
+          <rect x="92" y="148" width="88" height="28" rx="13" fill="#f7d7a8" stroke="#8c5828" stroke-width="3"/>
+          <rect x="122" y="151" width="28" height="22" rx="4" fill="#e6bc82" stroke="#b58347" stroke-width="1.5"/>
+          <circle cx="104" cy="157" r="2.2" fill="#8c5828"/><circle cx="112" cy="157" r="2.2" fill="#8c5828"/>
+          <circle cx="104" cy="167" r="2.2" fill="#8c5828"/><circle cx="112" cy="167" r="2.2" fill="#8c5828"/>
+          <circle cx="160" cy="157" r="2.2" fill="#8c5828"/><circle cx="168" cy="157" r="2.2" fill="#8c5828"/>
+          <circle cx="160" cy="167" r="2.2" fill="#8c5828"/><circle cx="168" cy="167" r="2.2" fill="#8c5828"/>
+        </g>
+
+        <!-- 右臉大紅腫＋下巴十字 OK 繃＋冒冷汗 -->
+        <ellipse class="v s2 s3 s4 s5" cx="284" cy="182" rx="44" ry="34" fill="url(#swellGrad)"/>
+        <g class="v s2 s3 s4 s5" transform="translate(262,232)">
+          <rect x="-32" y="-10" width="64" height="20" rx="9" fill="#f7d7a8" stroke="#8c5828" stroke-width="2.5" transform="rotate(32)"/>
+          <rect x="-32" y="-10" width="64" height="20" rx="9" fill="#f7d7a8" stroke="#8c5828" stroke-width="2.5" transform="rotate(-32)"/>
+        </g>
+        <g class="v s2 s3">
+          <path d="M326 70 Q340 96 326 110 Q312 96 326 70 Z" fill="#4dabf7" stroke="#1864ab" stroke-width="2.5"/>
+          <path d="M108 82 Q120 104 108 116 Q96 104 108 82 Z" fill="#4dabf7" stroke="#1864ab" stroke-width="2.5"/>
+        </g>
+
+        <!-- 額頭醫療繃帶包紮＋頭頂大腫包＋紅腫鼻 -->
+        <g class="v s3 s4 s5">
+          <path d="M106 48 Q224 18 342 56 L336 94 Q224 56 112 84 Z" fill="#f8f9fa" stroke="#adb5bd" stroke-width="3"/>
+          <path d="M112 66 Q224 36 338 74" fill="none" stroke="#dee2e6" stroke-width="2"/>
+          <circle cx="185" cy="57" r="9" fill="#e63946" opacity="0.85"/>
+          <ellipse cx="288" cy="28" rx="34" ry="23" fill="#ff758f" stroke="#a4133c" stroke-width="3.5"/>
+          <ellipse cx="278" cy="20" rx="11" ry="6" fill="#fff" opacity="0.75"/>
+          <circle cx="215" cy="148" r="18" fill="url(#swellGrad)"/>
+          <path d="M208 162 Q205 186 212 192 Q218 186 214 162 Z" fill="#d90429"/>
+        </g>
+
+        <!-- 眼淚 -->
+        <g class="v s3 s5 tears" fill="none" stroke="#4dabf7" stroke-width="9" stroke-linecap="round" opacity="0.92">
+          <path d="M162 118 Q150 175 158 235"/>
+          <path d="M264 130 Q276 185 266 242"/>
+        </g>
+
+        <!-- K.O. 叉叉眼＋頭頂旋轉金星 -->
+        <g class="v s4" stroke="#ffe14d" stroke-width="7" stroke-linecap="round">
+          <path d="M148 88 L184 120 M184 88 L148 120"/>
+          <path d="M246 102 L282 134 M282 102 L246 134"/>
+        </g>
+        <g class="v s4 stars" font-size="36">
+          <text x="105" y="48">⭐</text>
+          <text x="210" y="36">💫</text>
+          <text x="315" y="52">⭐</text>
+        </g>
+      </g>
+    </svg>
+
+    <!-- 第一人稱雙拳與巴頭大手（僅在出拳瞬間揮出，平時不遮擋畫面） -->
+    <div class="fist" id="fistL" aria-hidden="true">🤜</div>
+    <div class="fist" id="fistR" aria-hidden="true">🤛</div>
+    <div id="slapHand" aria-hidden="true">🖐️</div>
+    <div id="toast" role="status"></div>
+    <div id="flash"></div>
+  </main>
+
+  <!-- 4. 底部流暢攻擊控制列 -->
+  <nav id="controls" aria-label="攻擊按鈕">
+    <button class="btn" id="bL" data-move="L">
+      <span class="ic">🤜</span>
+      <span>左勾拳</span>
+    </button>
+    <button class="btn" id="bH" data-move="H">
+      <span class="ic">🖐️</span>
+      <span>巴頭頂</span>
+    </button>
+    <button class="btn" id="bR" data-move="R">
+      <span class="ic">🤛</span>
+      <span>右勾拳</span>
+    </button>
+    <p class="disc">點按招式或直接點擊臉部出拳</p>
+  </nav>
+
+  <!-- 開場畫面（清爽聚焦事發經過，不塞冗長百分比說明） -->
+  <section id="start" class="overlay">
+    <div class="card">
+      <div class="hero-row">
+        <img src="target.jpg" alt="追撞三寶" class="hero-thumb"/>
+        <div class="hero-title">
+          <span class="badge">主觀視角消氣遊戲</span>
+          <h1>三寶消氣拳</h1>
+          <p class="sub">從後面追撞還態度惡劣？打到他認錯！</p>
+        </div>
+      </div>
+      <div class="story">
+        <b>🚨 事發經過</b>
+        <p>你照規矩在路口停等紅燈，後面這位<b>三寶駕駛</b>邊開車邊滑手機、沒保持安全距離，「<b>碰！</b>」一聲直接從後面追撞你的車！</p>
+        <p>明明是他的錯，他下車不但不道歉，還走到車窗邊對你破口大罵：</p>
+        <span class="quote">「明明是你紅燈煞車踩太急，要賠也是你賠我前保桿！」</span>
+      </div>
+      <button id="go" class="big">👊 開始教訓三寶</button>
+      <p class="tip">🔊 內建台灣男聲斥責＋三寶求饒語音（iPhone 請關閉側邊靜音鍵）</p>
+      <p id="inapp" class="tip warn" hidden>💡 若在 LINE 內聲音較小，<a id="extLink" href="#">點此用預設瀏覽器開啟</a></p>
+    </div>
+  </section>
+
+  <!-- K.O. 懺悔結算面板 -->
+  <section id="result" class="sheet" hidden>
+    <div class="ko-title">🎉 三寶徹底懺悔認錯了！</div>
+    <div id="confess" class="confess"></div>
+    <div class="stats">
+      <div><b id="stHits">0</b><span>痛扁拳數</span></div>
+      <div><b id="stTime">0</b><span>消氣秒數</span></div>
+      <div><b id="stCombo">0</b><span>最高連擊</span></div>
+    </div>
+    <div id="rank" class="rank"></div>
+    <div class="row">
+      <button id="again" class="big">🥊 再打一頓消氣</button>
+    </div>
+    <div class="row">
+      <button id="shareLine" class="big line">💬 傳給 LINE 好友一起打</button>
+      <button id="share" class="mini">🔗 複製連結</button>
+    </div>
+  </section>
+</div>
+
+<script src="lines.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
