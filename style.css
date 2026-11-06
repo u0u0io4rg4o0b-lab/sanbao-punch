@@ -4,7 +4,8 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
   color:#f8f9fa;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation;
 }
-button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+button,input,textarea{font-family:inherit;touch-action:manipulation}
+button{cursor:pointer}
 
 #app{
   position:relative;width:100%;max-width:480px;height:100vh;height:100dvh;margin:0 auto;
@@ -14,14 +15,14 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 
 /* 1. 頂部精簡 HUD */
 #hud{
-  display:flex;align-items:center;gap:12px;
-  padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;
+  display:flex;align-items:center;gap:8px;
+  padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;
   background:#101426;border-bottom:1px solid rgba(255,255,255,.08);z-index:6;
 }
 #hud .info{flex:1;min-width:0}
-#name{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}
-#name .title{font-weight:900;font-size:15px;letter-spacing:.3px;color:#f1f3f9;white-space:nowrap}
-#name .badges{display:flex;align-items:center;gap:6px}
+#name{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:7px}
+#name .title{font-weight:900;font-size:15px;letter-spacing:.3px;color:#f1f3f9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#name .badges{display:flex;align-items:center;gap:5px;flex:none}
 #combo{
   font-size:12px;font-weight:900;padding:2px 8px;border-radius:99px;
   background:rgba(255,225,77,.16);color:#ffe14d;border:1px solid rgba(255,225,77,.45);
@@ -47,16 +48,15 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 #hpfill.s2{background:linear-gradient(90deg,#f76707,#ffa94d)}
 #hpfill.s3{background:linear-gradient(90deg,#e03131,#ff6b6b)}
 
-#mute{
-  flex:none;width:38px;height:38px;border-radius:50%;
-  border:1px solid rgba(255,255,255,.18);background:#1b223f;color:#fff;font-size:18px;
+.icon-btn{
+  flex:none;width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);background:#1b223f;color:#fff;font-size:17px;
   display:flex;align-items:center;justify-content:center;
 }
+.studio-trigger{background:#2b3563;border-color:rgba(255,225,77,.5)}
 
-/* 2. 專屬對白區：獨立於人物照片上方，絕不壓住額頭或頭頂傷勢 */
-#dialog{
-  padding:8px 14px 6px;background:#101426;z-index:5;flex:none;
-}
+/* 2. 專屬對白區 */
+#dialog{padding:8px 14px 6px;background:#101426;z-index:5;flex:none}
 #bubble{
   min-height:64px;padding:9px 13px;border-radius:14px;
   background:#ffffff;color:#141726;border:2px solid #e9ecef;
@@ -64,26 +64,22 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
   display:flex;flex-direction:column;justify-content:center;gap:2px;
   transition:background .18s ease,border-color .18s ease,transform .15s ease;
 }
-#bubble.player{
-  background:#fff9db;border-color:#fcc419;
-}
+#bubble.player{background:#fff9db;border-color:#fcc419}
 #bubble.pop{animation:bubblePop .2s ease}
 @keyframes bubblePop{50%{transform:scale(1.015)}}
-#who{
-  font-size:11.5px;font-weight:900;color:#e03131;letter-spacing:.2px;
-}
+#who{font-size:11.5px;font-weight:900;color:#e03131;letter-spacing:.2px}
 #bubble.player #who{color:#d9480f}
-#bubbleText{
-  font-size:15px;font-weight:800;line-height:1.42;color:#141726;
-  overflow-wrap:anywhere;
-}
+#bubbleText{font-size:15px;font-weight:800;line-height:1.42;color:#141726;overflow-wrap:anywhere}
 
-/* 3. 主舞台（真人照片主觀視角） */
+/* 3. 主舞台 */
 #stage{
   position:relative;flex:1;overflow:hidden;min-height:0;
   background:radial-gradient(circle at 50% 38%,#232c4b,#0c0f1f);
 }
-
+#bgVideo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:1;
+}
+#bgVideo[hidden]{display:none}
 #dude{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2;cursor:pointer;touch-action:manipulation}
 #dude .v{display:none}
 #dude[data-stage="0"] .s0,#dude[data-stage="1"] .s1,#dude[data-stage="2"] .s2,
@@ -109,17 +105,15 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 .flagcloth{transform-box:fill-box;transform-origin:0 50%;animation:wave .45s ease-in-out infinite alternate}
 @keyframes wave{to{transform:skewY(7deg) scaleX(.9)}}
 
-/* 輕量狀態提示（不遮擋臉部中央） */
 #toast{
   position:absolute;left:16px;right:16px;bottom:14px;z-index:7;text-align:center;
-  padding:8px 14px;border-radius:99px;background:rgba(16,20,38,.92);
+  padding:8px 14px;border-radius:99px;background:rgba(16,20,38,.94);
   border:1.5px solid rgba(255,225,77,.65);color:#ffe14d;font-size:13.5px;font-weight:800;
   box-shadow:0 6px 16px rgba(0,0,0,.5);opacity:0;pointer-events:none;
 }
-#toast.on{animation:toast 1.9s ease forwards}
+#toast.on{animation:toast 2.1s ease forwards}
 @keyframes toast{12%{opacity:1;transform:translateY(-4px)}84%{opacity:1;transform:translateY(-4px)}100%{opacity:0;transform:translateY(4px)}}
 
-/* 第一人稱拳頭與巴頭手掌：平時隱藏不佔畫面，僅出拳瞬間揮出 */
 .fist{
   position:absolute;bottom:-24px;z-index:5;font-size:82px;line-height:1;
   opacity:0;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5));
@@ -174,18 +168,16 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 #bL{background:linear-gradient(180deg,#fa5252,#c92a2a)}
 #bH{background:linear-gradient(180deg,#ffd43b,#f08c00);color:#241400}
 #bR{background:linear-gradient(180deg,#339af0,#1864ab)}
-.disc{
-  grid-column:1/-1;font-size:11.5px;color:#848eb0;text-align:center;margin-top:-2px;
-}
+.disc{grid-column:1/-1;font-size:11.5px;color:#848eb0;text-align:center;margin-top:-2px}
 
-/* 5. 開場畫面卡片（清爽留白、無劇透清單） */
+/* 5. 開場與自訂工作坊彈窗 */
 .overlay{
   position:absolute;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;
-  padding:16px;background:rgba(8,10,22,.86);backdrop-filter:blur(6px);overflow-y:auto;
+  padding:14px;background:rgba(8,10,22,.88);backdrop-filter:blur(6px);overflow-y:auto;
 }
-.overlay[hidden],.sheet[hidden]{display:none}
+.overlay[hidden],.sheet[hidden],.tab-pane[hidden]{display:none !important}
 .card{
-  width:100%;max-width:400px;padding:20px 18px;border-radius:20px;
+  width:100%;max-width:420px;padding:18px 16px;border-radius:20px;
   background:#171c33;border:1px solid rgba(255,255,255,.14);
   box-shadow:0 16px 40px rgba(0,0,0,.65);text-align:center;
 }
@@ -198,39 +190,50 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
   display:inline-block;padding:2px 9px;border-radius:99px;
   background:#e03131;color:#fff;font-size:11px;font-weight:800;
 }
-h1{font-size:28px;font-weight:900;color:#ffe14d;letter-spacing:.5px;margin-top:3px}
+h1{font-size:27px;font-weight:900;color:#ffe14d;letter-spacing:.5px;margin-top:3px}
 .sub{font-size:13px;color:#c5cde8;font-weight:700;margin-top:2px}
 .story{
-  margin:14px 0 16px;padding:12px 14px;border-radius:14px;
-  background:#f8f9fa;color:#1b1e2b;font-size:14px;line-height:1.58;text-align:left;
+  margin:12px 0 14px;padding:12px 14px;border-radius:14px;
+  background:#f8f9fa;color:#1b1e2b;font-size:13.5px;line-height:1.56;text-align:left;
 }
 .story b{color:#111}
 .story p{margin-top:4px}
 .story .quote{
   display:block;margin-top:8px;padding:7px 10px;border-radius:8px;
-  border-left:4px solid #e03131;background:#fff0f0;color:#b00020;font-weight:900;font-size:13.5px;
+  border-left:4px solid #e03131;background:#fff0f0;color:#b00020;font-weight:900;font-size:13px;
 }
 .big{
-  width:100%;padding:13px 20px;border:none;border-radius:99px;
-  background:linear-gradient(180deg,#fa5252,#c92a2a);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:100%;padding:13px 18px;border:none;border-radius:99px;
+  background:linear-gradient(180deg,#fa5252,#c92a2a);color:#fff;text-decoration:none;
   font-size:17px;font-weight:900;box-shadow:0 4px 0 #7a1414;
 }
 .big:active{transform:translateY(3px);box-shadow:0 1px 0 #7a1414}
+.big.gold-cta{
+  background:linear-gradient(180deg,#ffd43b,#f08c00);color:#241400;box-shadow:0 4px 0 #8a4d00;font-size:16px;
+}
 .big.line{
   background:linear-gradient(180deg,#2ee07a,#06c755);box-shadow:0 4px 0 #03803a;
   font-size:15px;padding:11px 16px;width:auto;flex:1;
 }
+.start-actions{margin-top:10px}
+.sec-btn{
+  flex:1;padding:9px 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.24);
+  background:#22294a;color:#f1f3f9;font-size:13px;font-weight:800;white-space:nowrap;
+}
+.sec-btn.gold{border-color:rgba(255,225,77,.65);color:#ffe14d;background:#2a2b3d}
+.sec-btn.full{width:100%;flex:none}
 .mini{
   padding:11px 14px;border:1.5px solid rgba(255,255,255,.55);border-radius:99px;
   background:transparent;color:#fff;font-size:14px;font-weight:800;
 }
-.tip{margin-top:10px;font-size:12px;line-height:1.45;color:#9aa4c7}
+.tip{margin-top:9px;font-size:12px;line-height:1.45;color:#9aa4c7}
 .tip.warn{color:#ffd166}
 .tip a{color:#69db7c}
 
 /* 6. K.O. 結算面板 */
 .sheet{
-  position:absolute;left:0;right:0;bottom:0;z-index:11;max-height:78%;overflow-y:auto;
+  position:absolute;left:0;right:0;bottom:0;z-index:11;max-height:82%;overflow-y:auto;
   padding:16px 16px calc(env(safe-area-inset-bottom) + 16px);
   border-radius:22px 22px 0 0;background:rgba(16,20,38,.98);
   border-top:2px solid #ffe14d;text-align:center;
@@ -249,6 +252,71 @@ h1{font-size:28px;font-weight:900;color:#ffe14d;letter-spacing:.5px;margin-top:3
 .stats span{font-size:11px;color:#a5b0d4}
 .rank{margin:4px 0 10px;font-size:16px;font-weight:900;color:#69db7c}
 .row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:8px}
+
+/* 7. 🛠️ 萬用自訂工作坊樣式 */
+.studio-card{
+  max-height:92vh;max-height:92dvh;overflow-y:auto;text-align:left;padding:16px;
+}
+.studio-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.studio-head h2{font-size:19px;font-weight:900;color:#ffe14d}
+.close-btn{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:#232a4a;color:#fff;font-size:15px;font-weight:900;
+}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tab{
+  padding:9px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
+  background:#111528;color:#9aa4c7;font-size:13px;font-weight:800;
+}
+.tab.on{background:#ffe14d;color:#141726;border-color:#ffe14d}
+
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12.5px;font-weight:800;color:#dbe1f7;margin-bottom:4px}
+.field input[type="text"],.field textarea{
+  width:100%;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.18);
+  background:#0e1224;color:#fff;font-size:13.5px;line-height:1.45;user-select:text;-webkit-user-select:text;
+}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.preset-row{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  padding:6px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.2);
+  background:#202747;color:#fff;font-size:12px;font-weight:800;
+}
+.chip:active{background:#ffe14d;color:#111}
+.upload-box{
+  padding:10px;border-radius:12px;border:1.5px dashed rgba(255,225,77,.45);
+  background:rgba(255,255,255,.03);text-align:center;
+}
+.upload-box small{display:block;margin-top:5px;font-size:11px;color:#9aa4c7}
+
+.calib-wrap{
+  display:flex;align-items:center;gap:12px;margin-top:8px;padding:8px;
+  border-radius:12px;background:#111528;border:1px solid rgba(255,255,255,.08);
+}
+.calib-stage{
+  position:relative;width:94px;height:148px;border-radius:10px;overflow:hidden;
+  border:2px solid #ffe14d;flex:none;cursor:crosshair;background:#000;
+}
+.calib-stage img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.calib-cross{
+  position:absolute;left:46%;top:18%;transform:translate(-50%,-50%);
+  font-size:18px;pointer-events:none;filter:drop-shadow(0 0 4px #000);
+}
+.calib-help{flex:1;font-size:12px;color:#c5cde8;line-height:1.45}
+.calib-help b{color:#ffe14d;display:block;margin-bottom:2px}
+.calib-help input[type="range"]{width:100%;margin-top:4px}
+
+.studio-actions{margin-top:12px}
+
+.ai-intro,.ai-steps{
+  padding:12px;border-radius:12px;background:#111528;border:1px solid rgba(255,255,255,.1);
+  font-size:13px;line-height:1.55;color:#d0d7f2;margin-bottom:12px;
+}
+.ai-intro b,.ai-steps b{color:#ffe14d;display:block;margin-bottom:4px}
+.ai-intro p+p{margin-top:6px}
+.ai-steps ol{padding-left:18px;margin-top:4px}
+.ai-steps li+li{margin-top:4px}
+code{padding:1px 5px;border-radius:5px;background:rgba(255,225,77,.15);color:#ffe14d;font-size:12px}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
